@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <!-- Background Radial Gradient: Shadow Monarch Void -->
+    <radialGradient id="shadowBg" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#1f1438"/>
+      <stop offset="50%" stop-color="#0e081c"/>
+      <stop offset="100%" stop-color="#04020a"/>
+    </radialGradient>
+
+    <!-- Deep Purple/Violet Shadow Aura Glow -->
+    <filter id="purpleShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Glowing Violet Eye Filter -->
+    <filter id="purpleEyeFlare" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Dark Hair with Violet Highlights -->
+    <linearGradient id="purpleHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a1b4e"/>
+      <stop offset="50%" stop-color="#140c26"/>
+      <stop offset="100%" stop-color="#07040d"/>
+    </linearGradient>
+
+    <!-- Armor Plate Gradient -->
+    <linearGradient id="armorPlate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#261742"/>
+      <stop offset="50%" stop-color="#120a21"/>
+      <stop offset="100%" stop-color="#06030c"/>
+    </linearGradient>
+
+    <!-- Energy Flare Gradient -->
+    <linearGradient id="purpleTrail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#c084fc"/>
+      <stop offset="70%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#7e22ce" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Outer Container -->
+  <circle cx="250" cy="250" r="236" fill="url(#shadowBg)"/>
+
+  <!-- Shadow Extraction Aura Flames -->
+  <g filter="url(#purpleShadow)" opacity="0.75">
+    <path d="M100 420 C70 280 130 150 200 90 C170 190 140 290 190 390 Z" fill="#9333ea"/>
+    <path d="M400 420 C430 280 370 150 300 90 C330 190 360 290 310 390 Z" fill="#9333ea"/>
+    <circle cx="250" cy="250" r="195" fill="none" stroke="#c084fc" stroke-width="2" stroke-dasharray="16 10" opacity="0.4"/>
+  </g>
+
+  <!-- Heavy Shadow Armor / Monarch Mantle -->
+  <path d="M100 490 L150 370 L250 415 L200 490 Z" fill="url(#armorPlate)"/>
+  <path d="M400 490 L350 370 L250 415 L300 490 Z" fill="url(#armorPlate)"/>
+  <!-- Sharp Shoulder Spikes / Mantle -->
+  <polygon points="150,370 180,310 220,340 190,420" fill="#1b1033" stroke="#a855f7" stroke-width="1.5"/>
+  <polygon points="350,370 320,310 280,340 310,420" fill="#1b1033" stroke="#a855f7" stroke-width="1.5"/>
+  <!-- Dark Chestplate -->
+  <path d="M210 340 L250 375 L290 340 L275 460 L225 460 Z" fill="#0d071a"/>
+  <!-- Rune Line / Energy Spine -->
+  <line x1="250" y1="375" x2="250" y2="470" stroke="#c084fc" stroke-width="2" opacity="0.7"/>
+
+  <!-- Neck & Sculpted Jawline -->
+  <path d="M228 295 L228 345 L250 360 L272 345 L272 295 Z" fill="#d9cebf"/>
+  <path d="M232 310 L250 332 L268 310 Z" fill="#b09f8d" opacity="0.6"/>
+
+  <!-- Face Contour -->
+  <path d="M182 225 C182 285 215 325 250 335 C285 325 318 285 318 225 C318 175 285 155 250 155 C215 155 182 175 182 225 Z" fill="#e6dcd0"/>
+  <path d="M236 322 L250 334 L264 322 Z" fill="#baa894"/>
+
+  <!-- Determined Expression / Firm Line Mouth -->
+  <path d="M238 292 Q250 295 264 290" stroke="#48382c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <polygon points="250,244 246,272 252,272" fill="#bda895"/>
+
+  <!-- GLOWING MONARCH VIOLET EYES -->
+  <!-- Left Eye -->
+  <g>
+    <path d="M198 222 L230 216 L234 222 L202 226 Z" fill="#080410"/>
+    <path d="M202 232 Q216 226 230 234 Q216 240 202 232 Z" fill="#0c0718"/>
+    <circle cx="218" cy="233" r="4.5" fill="#c084fc" filter="url(#purpleEyeFlare)"/>
+    <circle cx="218" cy="233" r="2.5" fill="#ffffff"/>
+    <path d="M218 233 C198 226 170 236 155 248" stroke="url(#purpleTrail)" stroke-width="2.5" stroke-linecap="round" fill="none" filter="url(#purpleShadow)"/>
+  </g>
+
+  <!-- Right Eye -->
+  <g>
+    <path d="M302 222 L270 216 L266 222 L298 226 Z" fill="#080410"/>
+    <path d="M298 232 Q284 226 270 234 Q284 240 298 232 Z" fill="#0c0718"/>
+    <circle cx="282" cy="233" r="4.5" fill="#c084fc" filter="url(#purpleEyeFlare)"/>
+    <circle cx="282" cy="233" r="2.5" fill="#ffffff"/>
+    <path d="M282 233 C302 226 330 236 345 248" stroke="url(#purpleTrail)" stroke-width="2.5" stroke-linecap="round" fill="none" filter="url(#purpleShadow)"/>
+  </g>
+
+  <!-- DARK SPIKED HUNTER HAIR -->
+  <path d="M170 185 C150 135 190 85 250 80 C310 85 350 135 330 185 L345 225 L320 245 L325 175 L175 175 L180 245 L155 225 Z" fill="url(#purpleHairGrad)"/>
+  <path d="M175 175 Q210 195 205 240 Q225 190 235 245 Q248 185 252 235 Q265 190 275 245 Q285 195 310 235 Q305 185 330 175 C310 105 190 105 175 175 Z" fill="url(#purpleHairGrad)"/>
+  <path d="M205 155 Q225 135 250 133 Q275 135 295 155" stroke="#c084fc" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M246 180 L252 240 L260 195 Z" fill="#2d1b54"/>
+
+  <!-- Outer Monarch Rune Ring -->
+  <circle cx="250" cy="250" r="236" fill="none" stroke="#a855f7" stroke-width="3" opacity="0.5"/>
+  <circle cx="250" cy="250" r="240" fill="none" stroke="#c084fc" stroke-width="1" stroke-dasharray="14 10" opacity="0.55"/>
+</svg>

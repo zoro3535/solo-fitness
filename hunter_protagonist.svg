@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <!-- Background Radial Gradient: Midnight Void -->
+    <radialGradient id="hunterBg" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#141c30"/>
+      <stop offset="50%" stop-color="#0a0e18"/>
+      <stop offset="100%" stop-color="#030509"/>
+    </radialGradient>
+
+    <!-- Electric Blue Hunter Aura Glow -->
+    <filter id="shadowAura" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Glowing Blue Eye Filter -->
+    <filter id="eyeFlare" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Dark Hair Gradient with Icy Blue Highlights -->
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b253b"/>
+      <stop offset="50%" stop-color="#0f1523"/>
+      <stop offset="100%" stop-color="#060910"/>
+    </linearGradient>
+
+    <!-- Trench Coat Collar & Armor Gradient -->
+    <linearGradient id="coatGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161f33"/>
+      <stop offset="50%" stop-color="#0c111c"/>
+      <stop offset="100%" stop-color="#05070c"/>
+    </linearGradient>
+
+    <!-- Cyan/Blue Energy Trail -->
+    <linearGradient id="energyTrail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#38bdf8"/>
+      <stop offset="70%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Outer Container -->
+  <circle cx="250" cy="250" r="236" fill="url(#hunterBg)"/>
+
+  <!-- Shadow Aura Background Wisps -->
+  <g filter="url(#shadowAura)" opacity="0.65">
+    <path d="M120 400 C90 280 140 180 200 120 C180 200 160 300 210 380 Z" fill="#0284c7"/>
+    <path d="M380 400 C410 280 360 180 300 120 C320 200 340 300 290 380 Z" fill="#0284c7"/>
+    <circle cx="250" cy="250" r="195" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="14 10" opacity="0.4"/>
+  </g>
+
+  <!-- Sharp Shadow Armor / High Trench Coat Collar -->
+  <!-- Left Shoulder / Chest -->
+  <path d="M110 490 L160 380 L250 420 L210 490 Z" fill="url(#coatGrad)"/>
+  <!-- Right Shoulder / Chest -->
+  <path d="M390 490 L340 380 L250 420 L290 490 Z" fill="url(#coatGrad)"/>
+  <!-- High Trench Collar (Left) -->
+  <path d="M150 420 L180 320 L230 350 L200 440 Z" fill="#131a29" stroke="#1e293b" stroke-width="2"/>
+  <!-- High Trench Collar (Right) -->
+  <path d="M350 420 L320 320 L270 350 L300 440 Z" fill="#131a29" stroke="#1e293b" stroke-width="2"/>
+  <!-- Inner Dark Shirt / Combat Suit -->
+  <path d="M210 350 L250 380 L290 350 L270 460 L230 460 Z" fill="#090d15"/>
+  <!-- Silver Zipper / Steel Trim -->
+  <line x1="250" y1="380" x2="250" y2="470" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+
+  <!-- Neck & Strong Jawline -->
+  <path d="M228 300 L228 350 L250 365 L272 350 L272 300 Z" fill="#e2d8ce"/>
+  <path d="M232 315 L250 338 L268 315 Z" fill="#c4b5a5" opacity="0.5"/>
+
+  <!-- Face Contour (Sharp Masculine Anime Jawline) -->
+  <path d="M182 230 C182 290 215 328 250 338 C285 328 318 290 318 230 C318 180 285 160 250 160 C215 160 182 180 182 230 Z" fill="#ede3d8"/>
+  <!-- Subtle Chin Shadow -->
+  <path d="M236 324 L250 336 L264 324 Z" fill="#d1bead"/>
+
+  <!-- Cool Confident Smirk / Mouth -->
+  <path d="M238 296 Q250 299 264 294" stroke="#5a4d41" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Sharp Nose Bridge & Shadow -->
+  <polygon points="250,248 246,275 252,275" fill="#cbb8a7"/>
+
+  <!-- GLOWING SHADOW HUNTER EYES -->
+  <!-- Left Eye -->
+  <g>
+    <!-- Eyebrow: Sharp, Focused, Intense -->
+    <path d="M198 226 L230 220 L234 226 L202 230 Z" fill="#0a0f18"/>
+    <!-- Eye Socket / Outline -->
+    <path d="M202 236 Q216 230 230 238 Q216 244 202 236 Z" fill="#0d131f"/>
+    <!-- Glowing Blue Iris & Flare -->
+    <circle cx="218" cy="237" r="4.5" fill="#38bdf8" filter="url(#eyeFlare)"/>
+    <circle cx="218" cy="237" r="2.5" fill="#ffffff"/>
+    <!-- Eye Light Trail / Monarch Flare -->
+    <path d="M218 237 C200 230 175 240 160 250" stroke="url(#energyTrail)" stroke-width="2.5" stroke-linecap="round" fill="none" filter="url(#shadowAura)"/>
+  </g>
+
+  <!-- Right Eye -->
+  <g>
+    <!-- Eyebrow -->
+    <path d="M302 226 L270 220 L266 226 L298 230 Z" fill="#0a0f18"/>
+    <!-- Eye Socket -->
+    <path d="M298 236 Q284 230 270 238 Q284 244 298 236 Z" fill="#0d131f"/>
+    <!-- Glowing Blue Iris & Flare -->
+    <circle cx="282" cy="237" r="4.5" fill="#38bdf8" filter="url(#eyeFlare)"/>
+    <circle cx="282" cy="237" r="2.5" fill="#ffffff"/>
+    <!-- Eye Light Trail -->
+    <path d="M282 237 C300 230 325 240 340 250" stroke="url(#energyTrail)" stroke-width="2.5" stroke-linecap="round" fill="none" filter="url(#shadowAura)"/>
+  </g>
+
+  <!-- SHADOW HUNTER HAIR (Sharp, layered, dynamic anime bangs) -->
+  <!-- Back Hair Silhouette -->
+  <path d="M170 190 C150 140 190 90 250 85 C310 90 350 140 330 190 L345 230 L320 250 L325 180 L175 180 L180 250 L155 230 Z" fill="url(#hairGrad)"/>
+  
+  <!-- Front Bangs Layer 1 (Dark Midnight) -->
+  <path d="M175 180 Q210 200 205 245 Q225 195 235 250 Q248 190 252 240 Q265 195 275 250 Q285 200 310 240 Q305 190 330 180 C310 110 190 110 175 180 Z" fill="url(#hairGrad)"/>
+  
+  <!-- Front Spikes / Strands with Icy Edge Highlights -->
+  <path d="M218 190 L228 250 L234 210 Z" fill="#1e293b"/>
+  <path d="M246 185 L252 245 L260 200 Z" fill="#1e293b"/>
+  <path d="M268 190 L278 245 L282 215 Z" fill="#1e293b"/>
+  <!-- Icy Blue Highlight Glint on Hair Spikes -->
+  <path d="M205 160 Q225 140 250 138 Q275 140 295 160" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M225 185 L232 225" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Floating Energy Dagger Blade (Subtle in Foreground) -->
+  <g filter="url(#shadowAura)">
+    <polygon points="340,310 380,360 365,370 330,325" fill="#38bdf8" opacity="0.75"/>
+    <polygon points="345,315 375,355 365,362 338,325" fill="#ffffff" opacity="0.9"/>
+  </g>
+
+  <!-- Outer Cyber/System Tech Ring -->
+  <circle cx="250" cy="250" r="236" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.5"/>
+  <circle cx="250" cy="250" r="240" fill="none" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="16 12" opacity="0.6"/>
+</svg>
