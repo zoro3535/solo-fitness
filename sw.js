@@ -1,12 +1,14 @@
-// Simple Service Worker for offline capability
-const CACHE_NAME = "solo-fitness-cache-v1";
+// Service Worker for offline capability
+const CACHE_NAME = "aura-hunter-cache-v3";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
   "./style.css",
   "./app.js",
   "./manifest.json",
-  "./icon.svg"
+  "./icon.svg",
+  "./hunter_protagonist.svg",
+  "./hunter_monarch.svg"
 ];
 
 // Install Event - cache core app files
