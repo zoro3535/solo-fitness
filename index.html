@@ -3,59 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Solo Fitness Tracker - Shadow Monarch</title>
+  <title>Aura: Shadow Hunter RPG Fitness</title>
   <!-- PWA & Mobile App Meta Tags -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0a0715">
+  <meta name="theme-color" content="#070a12">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Solo Fitness">
+  <meta name="apple-mobile-web-app-title" content="Aura Hunter">
   <link rel="apple-touch-icon" href="icon.svg">
 
-  <!-- Google Fonts: Orbitron for futuristic HUD headers, Inter for clean readable text -->
+  <!-- Google Fonts: Plus Jakarta Sans for clean geometric headings, Inter for sharp readable metrics -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-blue aesthetic-hunter">
   <div class="mobile-container">
-    <!-- SYSTEM HEADER (Always Visible on Top) -->
-    <header class="system-header">
-      <div class="system-badge">
-        <span class="pulse-dot"></span> SYSTEM ALERT
+
+    <!-- FLOATING SHADOW ENERGY PARTICLES -->
+    <div class="bg-decorations" aria-hidden="true">
+      <span class="particle pt1">◆</span>
+      <span class="particle pt2">◈</span>
+      <span class="particle pt3">◆</span>
+      <span class="particle pt4">⚡</span>
+      <div class="shadow-mist m1"></div>
+      <div class="shadow-mist m2"></div>
+    </div>
+
+    <!-- MASCULINE ANIME HUNTER HERO HEADER -->
+    <header class="companion-header">
+      <div class="companion-avatar-wrap" onclick="companionCheer()" title="Tap your Hunter for a battle decree!">
+        <img src="hunter_protagonist.svg" alt="Shadow Hunter Protagonist" id="companion-img" class="companion-avatar" onerror="this.onerror=null; this.src='icon.svg';">
+        <span class="companion-eye-flare">⚡</span>
+        <span class="companion-status-dot" title="Hunter Awakening Active"></span>
       </div>
-      <h1 class="system-title">SHADOW QUEST: TRAINING OF THE MONARCH</h1>
-      <p class="system-warning">
-        <span class="warning-icon">⚠</span> Daily penalty zone triggers if tasks are neglected.
-      </p>
+
+      <div class="greeting-content">
+        <div class="header-badges-row">
+          <div class="date-badge">
+            <span class="date-icon">⚔️</span>
+            <span id="header-today-date">SYSTEM ACTIVE</span>
+          </div>
+          <div class="streak-badge" id="header-streak-badge" title="Consecutive Daily Training Streak">
+            <span class="streak-icon">🔥</span>
+            <span id="header-streak-count">0-DAY STREAK</span>
+          </div>
+        </div>
+        <h1 class="greeting-title" id="companion-greeting">HUNTER JIN-WOO</h1>
+        <p class="greeting-message" id="companion-quote">"Pain is temporary. Victory and strength are eternal."</p>
+      </div>
     </header>
 
     <!-- ==========================================
          VIEW 1: QUESTS SCREEN (Today's Training)
          ========================================== -->
     <section class="tab-view active" id="view-quests">
-      <!-- GYM WORKOUT SPLIT SELECTOR -->
+
+      <!-- QUICK PROGRESS SUMMARY HUD -->
+      <div class="quick-summary-card">
+        <div class="summary-top">
+          <div class="summary-info">
+            <span class="summary-label">DAILY QUEST COMPLETION</span>
+            <span class="summary-count" id="quests-counter">0 of 0 Cleared</span>
+          </div>
+          <div class="summary-percentage-pill" id="daily-percentage">0%</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill daily-bar" id="daily-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- WORKOUT SPLIT SELECTION (Tactical Carbon Pills) -->
       <div class="split-selector-section">
         <div class="section-header">
-          <h3 class="section-title">TODAY'S DUNGEON</h3>
+          <h2 class="section-title">
+            <span class="title-icon">⚔️</span> TRAINING SPLIT
+          </h2>
           <span class="difficulty-tag" id="difficulty-badge">SCALING: LV 1</span>
         </div>
         <div class="split-tabs">
           <button class="split-tab-btn active" id="tab-push" onclick="selectSplit('push')">
-            <span class="split-icon">🗡️</span>
-            <span class="split-label">Push</span>
+            <span class="split-icon">🛡️</span>
+            <span class="split-label">Push Day</span>
           </button>
           <button class="split-tab-btn" id="tab-pull" onclick="selectSplit('pull')">
             <span class="split-icon">🏹</span>
-            <span class="split-label">Pull</span>
+            <span class="split-label">Pull Day</span>
           </button>
           <button class="split-tab-btn" id="tab-legs" onclick="selectSplit('legs')">
-            <span class="split-icon">🛡️</span>
-            <span class="split-label">Legs</span>
+            <span class="split-icon">⚡</span>
+            <span class="split-label">Leg Day</span>
           </button>
           <button class="split-tab-btn" id="tab-full" onclick="selectSplit('full')">
-            <span class="split-icon">⚡</span>
+            <span class="split-icon">🔥</span>
             <span class="split-label">Full Body</span>
           </button>
         </div>
@@ -64,48 +105,51 @@
       <!-- WORKOUT EXERCISES SECTION -->
       <div class="quest-section">
         <div class="section-header">
-          <h3 class="section-title" id="current-split-title">PUSH EXERCISES</h3>
-          <button class="add-exercise-btn" onclick="openExerciseModal()">+ ADD EXERCISE</button>
+          <h3 class="sub-section-title" id="current-split-title">PUSH DAY PROTOCOLS</h3>
+          <button class="add-exercise-btn" onclick="openExerciseModal()">+ ADD PROTOCOL</button>
         </div>
 
-        <!-- Populated dynamically by app.js -->
+        <!-- Exercises rendered dynamically by app.js -->
         <div class="quest-list" id="exercises-list"></div>
 
         <div class="section-header sub-section">
-          <h3 class="section-title">DAILY HABITS</h3>
+          <h3 class="sub-section-title">DAILY DISCIPLINE PROTOCOLS</h3>
           <span class="reward-tag">+25 XP EACH</span>
         </div>
 
-        <!-- Populated dynamically by app.js -->
+        <!-- Habits rendered dynamically by app.js -->
         <div class="quest-list" id="habits-list"></div>
       </div>
 
       <!-- WORKOUT ACTIONS -->
       <div class="finish-day-section">
         <button class="action-btn primary" onclick="finishWorkoutDay()">
-          ⚔️ COMPLETE WORKOUT & LOG HISTORY
+          ⚔️ COMPLETE TRAINING & ARCHIVE RECORD
         </button>
         <button class="action-btn secondary" onclick="resetTodayQuests()">
-          ↺ RESET ACTIVE QUESTS
+          ↺ RESET ACTIVE PROTOCOLS
         </button>
       </div>
     </section>
 
     <!-- ==========================================
-         VIEW 2: STATUS SCREEN (Hunter HUD)
-         ========================================== -->
+         VIEW 2: STATUS SCREEN (Hunter System HUD)
+         ========================================= -->
     <section class="tab-view" id="view-status">
-      <!-- PLAYER STATUS CARD -->
+
+      <!-- HUNTER PROFILE CARD -->
       <div class="player-card">
+        <div class="player-card-bg-glow"></div>
         <div class="player-top">
           <div class="player-info">
             <div class="rank-row">
               <span class="rank-badge" id="player-rank">E-RANK HUNTER</span>
-              <button class="edit-profile-btn" onclick="openAwakeningModal(true)" title="Edit Hunter Profile">✎</button>
+              <button class="edit-profile-btn" onclick="openSettingsModal()" title="Edit Hunter Profile">⚙️</button>
             </div>
-            <h2 class="player-name" id="player-name-display">PLAYER</h2>
+            <h2 class="player-name" id="player-name-display">HUNTER</h2>
             <span class="goal-tag" id="player-goal-display">STRENGTH TRAINING</span>
           </div>
+
           <div class="level-box">
             <span class="level-label">LEVEL</span>
             <span class="level-number" id="player-level">1</span>
@@ -115,50 +159,95 @@
         <!-- XP PROGRESS BAR -->
         <div class="xp-section">
           <div class="xp-labels">
-            <span class="xp-title">SHADOW EXP</span>
+            <span class="xp-title">SHADOW ENERGY (EXP)</span>
             <span class="xp-value" id="xp-text">0 / 100 XP</span>
           </div>
-          <div class="progress-track">
+          <div class="progress-track xp-track">
             <div class="progress-fill xp-bar" id="xp-fill" style="width: 0%;"></div>
           </div>
         </div>
       </div>
 
-      <!-- TODAY'S COMPLETION SUMMARY -->
-      <div class="daily-summary-card">
-        <div class="summary-content">
-          <div class="summary-text">
-            <span class="summary-title">TODAY'S COMPLETION</span>
-            <p class="summary-subtitle" id="quests-counter">0 of 0 Completed</p>
-          </div>
-          <div class="percentage-display" id="daily-percentage">0%</div>
+      <!-- PERSONAL RECORDS (PR) SHOWCASE -->
+      <div class="pr-records-card">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <h3 class="sub-section-title">
+            <span class="title-icon">🏆</span> PERSONAL BESTS (PR)
+          </h3>
+          <span class="pr-total-badge" id="pr-total-badge">0 Records</span>
         </div>
-        <div class="progress-track small">
-          <div class="progress-fill daily-bar" id="daily-fill" style="width: 0%;"></div>
+        <p class="pr-subtitle-hint">Log your weight in protocols to track PRs & unlock +50 XP bonuses.</p>
+        <div class="pr-grid" id="pr-records-container">
+          <!-- Populated by app.js -->
         </div>
       </div>
 
-      <!-- SYSTEM SETTINGS & RESET -->
-      <div class="system-card">
-        <h3 class="section-title" style="margin-bottom: 10px;">SYSTEM SETTINGS</h3>
-        <button class="action-btn secondary" onclick="openAwakeningModal(true)" style="margin-bottom: 8px;">
-          ✎ EDIT HUNTER PROFILE & GOALS
-        </button>
+      <!-- COLLECTIBLE MILESTONE BADGES -->
+      <div class="badges-card">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <h3 class="sub-section-title">HUNTER ACHIEVEMENTS</h3>
+          <span class="badge-count" id="badge-count-text">1 Unlocked</span>
+        </div>
+        <div class="badge-grid" id="badges-container">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+      <!-- PERSONALIZATION & THEME SELECTOR -->
+      <div class="settings-card">
+        <h3 class="sub-section-title" style="margin-bottom: 12px;">SYSTEM CUSTOMIZATION</h3>
+
+        <div class="setting-item">
+          <label class="setting-label">AURA ENERGY THEME</label>
+          <div class="theme-picker-row">
+            <button class="theme-choice-btn active" data-theme="blue" onclick="setAppTheme('blue')" title="Icy Blue">
+              <span class="theme-swatch blue"></span> Icy Blue
+            </button>
+            <button class="theme-choice-btn" data-theme="purple" onclick="setAppTheme('purple')" title="Shadow Void">
+              <span class="theme-swatch purple"></span> Void Purple
+            </button>
+            <button class="theme-choice-btn" data-theme="silver" onclick="setAppTheme('silver')" title="Steel Silver">
+              <span class="theme-swatch silver"></span> Steel Blue
+            </button>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label">HUNTER AVATAR ARCHETYPE</label>
+          <div class="aesthetic-picker-row">
+            <button class="aesthetic-btn active" id="btn-aesthetic-hunter" onclick="setAppAesthetic('hunter')">
+              ⚔️ Shadow Hunter
+            </button>
+            <button class="aesthetic-btn" id="btn-aesthetic-monarch" onclick="setAppAesthetic('monarch')">
+              👑 Shadow Monarch
+            </button>
+          </div>
+        </div>
+
+        <div class="setting-item" style="margin-top: 10px;">
+          <button class="action-btn secondary full-btn" onclick="openAwakeningModal(true)">
+            ✎ EDIT HUNTER CREDENTIALS
+          </button>
+        </div>
+
         <button class="action-btn text-only" onclick="resetAllData()">
-          RESET ALL GAME DATA & RE-AWAKEN
+          RESET ALL SYSTEM PROGRESS & RE-AWAKEN
         </button>
         <p class="storage-note">
-          💾 All progress is safely saved in local device storage.
+          💾 Data permanently saved in local device partition.
         </p>
       </div>
+
     </section>
 
     <!-- ==========================================
-         VIEW 3: HISTORY SCREEN (Dungeon Records)
+         VIEW 3: HISTORY SCREEN (Dungeon Archives)
          ========================================== -->
     <section class="tab-view" id="view-history">
       <div class="section-header">
-        <h3 class="section-title">DUNGEON CLEAR RECORDS</h3>
+        <h2 class="section-title">
+          <span class="title-icon">📜</span> DUNGEON CLEAR ARCHIVES
+        </h2>
         <span class="history-count" id="history-count-badge">0 Cleared</span>
       </div>
 
@@ -167,7 +256,7 @@
     </section>
 
     <!-- ==========================================
-         BOTTOM NAVIGATION BAR (Dock)
+         BOTTOM NAVIGATION BAR (Tactical HUD Dock)
          ========================================== -->
     <nav class="bottom-nav">
       <button class="nav-item active" id="nav-quests" onclick="switchTab('quests')">
@@ -180,7 +269,7 @@
       </button>
       <button class="nav-item" id="nav-history" onclick="switchTab('history')">
         <span class="nav-icon">📜</span>
-        <span class="nav-label">History</span>
+        <span class="nav-label">Archives</span>
       </button>
     </nav>
 
@@ -190,71 +279,72 @@
 
     <!-- LEVEL UP MODAL -->
     <div class="modal-overlay" id="level-modal">
-      <div class="modal-card">
+      <div class="modal-card levelup-card">
+        <div class="levelup-sparkles">⚡ ⚔️ ⚡</div>
         <div class="modal-badge">SYSTEM NOTIFICATION</div>
-        <h2 class="modal-title">LEVEL UP!</h2>
+        <h2 class="modal-title levelup-title">LEVEL UP!</h2>
         <div class="modal-body">
-          <p class="level-up-message">Arise! Your physical parameters have elevated.</p>
+          <p class="level-up-message">Arise! Your physical parameters have elevated to a new threshold.</p>
           <div class="modal-level-display">
             <span id="modal-old-level">LV. 1</span>
             <span class="level-arrow">➜</span>
             <span class="new-level-highlight" id="modal-new-level">LV. 2</span>
           </div>
-          <p class="modal-subtext" id="modal-difficulty-notice">Workout difficulty and targets have scaled up.</p>
+          <p class="modal-subtext" id="modal-difficulty-notice">Training protocol intensity and volume have scaled upward.</p>
         </div>
-        <button class="modal-close-btn" onclick="closeLevelModal()">ARISE & ACCEPT REWARDS</button>
+        <button class="modal-close-btn pulse-glow" onclick="closeLevelModal()">CLAIM REWARDS & ARISE</button>
       </div>
     </div>
 
-    <!-- ONBOARDING / AWAKENING MODAL -->
+    <!-- ONBOARDING / AWAKENING / PROFILE MODAL -->
     <div class="modal-overlay" id="awakening-modal">
-      <div class="modal-card awakening-card">
+      <div class="modal-card form-modal-card">
         <div class="modal-badge">HUNTER REGISTRATION</div>
-        <h2 class="modal-title awakening-title">SYSTEM AWAKENING</h2>
-        <p class="awakening-desc">Enter your credentials to generate your customized training regimen.</p>
+        <h2 class="modal-title" style="font-size: 1.35rem;">HUNTER AWAKENING</h2>
+        <p class="modal-desc">Enter your combat identity and fitness objectives to configure your protocol.</p>
         
         <form id="awakening-form" onsubmit="handleAwakeningSubmit(event)">
           <div class="form-group">
-            <label for="input-hunter-name">Hunter Name</label>
+            <label for="input-hunter-name">Hunter Callsign / Name</label>
             <input type="text" id="input-hunter-name" placeholder="e.g. Sung Jin-Woo" required maxlength="20">
           </div>
 
           <div class="form-group">
-            <label for="select-hunter-rank">Starting Fitness Experience</label>
+            <label for="select-hunter-rank">Starting Experience Rank</label>
             <select id="select-hunter-rank">
-              <option value="beginner">E-Rank (Beginner - Building Foundation)</option>
-              <option value="intermediate">D-Rank (Intermediate - Regular Gym Lifter)</option>
-              <option value="advanced">C-Rank (Advanced - High Intensity Lifter)</option>
+              <option value="beginner">E-Rank (Beginner - Base Foundation)</option>
+              <option value="intermediate">D-Rank (Intermediate - Consistent Lifter)</option>
+              <option value="advanced">C-Rank (Advanced - Dedicated Athlete)</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="select-hunter-goal">Primary Objective</label>
             <select id="select-hunter-goal">
-              <option value="Hypertrophy">Muscle Hypertrophy (Build Muscle)</option>
-              <option value="Strength">Raw Strength & Powerlifting</option>
-              <option value="Fat Loss & Stamina">Fat Loss & Conditioning</option>
+              <option value="Hypertrophy">Muscle Hypertrophy (Mass & Armor)</option>
+              <option value="Strength">Raw Power & Heavy Strength</option>
+              <option value="Fat Loss & Stamina">Athletic Conditioning & Agility</option>
             </select>
           </div>
 
-          <button type="submit" class="modal-close-btn pulse-glow">AWAKEN AS A HUNTER</button>
+          <button type="submit" class="modal-close-btn" style="margin-top: 10px;">INITIALIZE AWAKENING ⚔️</button>
         </form>
       </div>
     </div>
 
     <!-- ADD / EDIT EXERCISE MODAL -->
     <div class="modal-overlay" id="exercise-modal">
-      <div class="modal-card awakening-card">
-        <div class="modal-badge" id="exercise-modal-badge">CUSTOM TRAINING</div>
-        <h2 class="modal-title awakening-title" id="exercise-modal-title">ADD EXERCISE</h2>
-        <p class="awakening-desc" id="exercise-modal-split-label">Add a new workout to Push Day.</p>
+      <div class="modal-card form-modal-card">
+        <div class="modal-badge" id="exercise-modal-badge">CUSTOM PROTOCOL</div>
+        <h2 class="modal-title" id="exercise-modal-title" style="font-size: 1.35rem;">Add Protocol</h2>
+        <p class="modal-desc" id="exercise-modal-split-label">Add a protocol to Push Day.</p>
 
         <form id="exercise-form" onsubmit="handleExerciseSubmit(event)">
           <input type="hidden" id="edit-exercise-id" value="">
 
           <div class="form-group">
-            <label for="input-exercise-name">Exercise Name</label>
-            <input type="text" id="input-exercise-name" placeholder="e.g. Incline Dumbbell Press" required maxlength="30">
+            <label for="input-exercise-name">Protocol Name</label>
+            <input type="text" id="input-exercise-name" placeholder="e.g. Incline Dumbbell Press" required maxlength="32">
           </div>
 
           <div class="form-row">
@@ -270,12 +360,12 @@
 
           <div class="form-group">
             <label for="input-exercise-focus">Muscle Target / Notes</label>
-            <input type="text" id="input-exercise-focus" placeholder="e.g. Upper Chest & Shoulders" maxlength="35">
+            <input type="text" id="input-exercise-focus" placeholder="e.g. Upper Chest & Delts" maxlength="35">
           </div>
 
           <div class="modal-actions-row">
-            <button type="button" class="action-btn secondary half" onclick="closeExerciseModal()">CANCEL</button>
-            <button type="submit" class="modal-close-btn half">SAVE EXERCISE</button>
+            <button type="button" class="action-btn secondary half" onclick="closeExerciseModal()">Cancel</button>
+            <button type="submit" class="modal-close-btn half">Save Protocol</button>
           </div>
         </form>
       </div>

@@ -1,78 +1,97 @@
 /* ========================================================
-   SOLO FITNESS TRACKER - SHADOW MONARCH GAME ENGINE
-   Features:
-   1. 3-Tab Bottom Navigation (Quests, Status, History)
-   2. Custom Exercises: Add, Edit, and Delete Workouts
-   3. Gym Splits: Push, Pull, Legs, Full Body
-   4. Progressive Difficulty Scaling
-   5. Locked Quests (Option B Anti-Cheat)
-   6. Dungeon Clear History Logging
-   7. LocalStorage Persistence
+   AURA: MASCULINE ANIME RPG FITNESS TRACKER
+   Engine & Logic:
+   - Solo Leveling Hunter Archetypes (Shadow Hunter & Shadow Monarch)
+   - Male anime hero quotes & disciplined battle decrees
+   - Icy Blue, Void Purple, and Steel Silver-Blue theme switching
+   - Full Workout Split System + Difficulty Scaling + LocalStorage
    ======================================================== */
 
 // 1. CONSTANTS & GAME RULES
-const STORAGE_KEY = "solo_fitness_monarch_v3";
+const STORAGE_KEY = "solo_fitness_hunter_v5";
 const XP_PER_QUEST = 25;
 const XP_FOR_LEVEL_UP = 100;
+
+// HUNTER COMBAT DECREES & DISCIPLINED QUOTES
+const COMPANION_QUOTES = [
+  "“Pain is temporary. Victory and physical power are eternal.” ⚔️",
+  "“The only opponent that matters is the version of you from yesterday.” ⚡",
+  "“Discipline beats motivation every single day. Execute your sets.” 🛡️",
+  "“To protect what matters, you must become undeniably strong.” 🔥",
+  "“Fatigue is weakness leaving the body. Stay locked in.” 🏹",
+  "“A monarch does not negotiate with weakness. Clear the dungeon.” 👑"
+];
+
+// COLLECTIBLE HUNTER MILESTONE ACHIEVEMENTS
+const BADGES_DATABASE = [
+  { id: "badge_first", title: "Awakened Hunter", icon: "⚔️", reqLevel: 1, desc: "Began training protocol" },
+  { id: "badge_lv3", title: "D-Rank Striker", icon: "🛡️", reqLevel: 3, desc: "Reached Hunter Level 3" },
+  { id: "badge_lv5", title: "Shadow Slayer", icon: "⚡", reqLevel: 5, desc: "Reached Hunter Level 5" },
+  { id: "badge_lv10", title: "Shadow Monarch", icon: "👑", reqLevel: 10, desc: "Reached Hunter Level 10" }
+];
 
 // DEFAULT GYM SPLITS TEMPLATE
 const DEFAULT_SPLITS = {
   push: {
     title: "PUSH DAY (CHEST, SHOULDERS, TRICEPS)",
     exercises: [
-      { id: "push_bench", name: "Barbell Bench Press", icon: "🏋️", baseSets: 3, baseReps: 8, focus: "Chest & Front Delts" },
-      { id: "push_ohp", name: "Overhead Shoulder Press", icon: "⚔️", baseSets: 3, baseReps: 8, focus: "Shoulders & Core" },
-      { id: "push_incline", name: "Incline DB Dumbbell Press", icon: "🛡️", baseSets: 3, baseReps: 10, focus: "Upper Chest" },
-      { id: "push_triceps", name: "Tricep Rope Pushdowns", icon: "⚡", baseSets: 3, baseReps: 12, focus: "Triceps Arm Size" }
+      { id: "push_bench", name: "Barbell Bench Press", icon: "🏋️", baseSets: 3, baseReps: 8, focus: "Pectorals & Heavy Press" },
+      { id: "push_ohp", name: "Overhead Military Press", icon: "⚔️", baseSets: 3, baseReps: 8, focus: "Anterior Delts & Core" },
+      { id: "push_incline", name: "Incline DB Heavy Press", icon: "🛡️", baseSets: 3, baseReps: 10, focus: "Upper Chest Clavicular" },
+      { id: "push_triceps", name: "Tricep Heavy Pushdowns", icon: "⚡", baseSets: 3, baseReps: 12, focus: "Triceps Lateral Head" }
     ]
   },
   pull: {
     title: "PULL DAY (BACK, BICEPS, REAR DELTS)",
     exercises: [
-      { id: "pull_lat", name: "Lat Pulldown / Pull-ups", icon: "🦅", baseSets: 3, baseReps: 8, focus: "Back Width & Lats" },
-      { id: "pull_row", name: "Barbell / Cable Rows", icon: "⚔️", baseSets: 3, baseReps: 10, focus: "Back Thickness" },
-      { id: "pull_face", name: "Face Pulls", icon: "🏹", baseSets: 3, baseReps: 12, focus: "Rear Delts & Posture" },
-      { id: "pull_curls", name: "Bicep Barbell Curls", icon: "💪", baseSets: 3, baseReps: 10, focus: "Biceps Peak" }
+      { id: "pull_lat", name: "Weighted Pull-ups / Lat Pulldown", icon: "🦅", baseSets: 3, baseReps: 8, focus: "Back Lat Width" },
+      { id: "pull_row", name: "Heavy Barbell Rows", icon: "⚔️", baseSets: 3, baseReps: 10, focus: "Mid-Back Thickness" },
+      { id: "pull_face", name: "Face Pulls & Rear Delts", icon: "🏹", baseSets: 3, baseReps: 12, focus: "Rear Delts & Armor" },
+      { id: "pull_curls", name: "Barbell Bicep Curls", icon: "💪", baseSets: 3, baseReps: 10, focus: "Biceps Peak" }
     ]
   },
   legs: {
     title: "LEG DAY (QUADS, HAMSTRINGS, CALVES)",
     exercises: [
-      { id: "leg_squat", name: "Barbell Back Squats / Leg Press", icon: "🦵", baseSets: 3, baseReps: 8, focus: "Quad Power & Glutes" },
+      { id: "leg_squat", name: "Barbell Back Squats / Leg Press", icon: "🦵", baseSets: 3, baseReps: 8, focus: "Quad Explosive Power" },
       { id: "leg_rdl", name: "Romanian Deadlifts (RDL)", icon: "🛡️", baseSets: 3, baseReps: 10, focus: "Hamstrings & Glutes" },
-      { id: "leg_lunge", name: "Walking DB Lunges", icon: "⚔️", baseSets: 3, baseReps: 10, focus: "Unilateral Leg Strength" },
-      { id: "leg_calves", name: "Standing Calf Raises", icon: "⚡", baseSets: 4, baseReps: 15, focus: "Calf Endurance" }
+      { id: "leg_lunge", name: "Heavy Walking Lunges", icon: "⚡", baseSets: 3, baseReps: 10, focus: "Leg Balance & Power" },
+      { id: "leg_calves", name: "Standing Heavy Calf Raises", icon: "🔥", baseSets: 4, baseReps: 15, focus: "Calf Stamina" }
     ]
   },
   full: {
     title: "FULL BODY / RECOVERY DUNGEON",
     exercises: [
-      { id: "full_deadlift", name: "Conventional Deadlifts", icon: "🔥", baseSets: 3, baseReps: 6, focus: "Posterior Chain" },
-      { id: "full_dips", name: "Bodyweight Dips / Push-ups", icon: "⚔️", baseSets: 3, baseReps: 12, focus: "Chest & Arms" },
-      { id: "full_pullup", name: "Pull-ups / Inverted Rows", icon: "🦅", baseSets: 3, baseReps: 8, focus: "Back & Grip" },
-      { id: "full_core", name: "Hanging Leg Raises / Planks", icon: "🛡️", baseSets: 3, baseReps: 15, focus: "Abdominal Core" }
+      { id: "full_deadlift", name: "Conventional Deadlifts", icon: "🔥", baseSets: 3, baseReps: 6, focus: "Full Posterior Chain" },
+      { id: "full_dips", name: "Weighted Dips / Push-ups", icon: "⚔️", baseSets: 3, baseReps: 12, focus: "Chest & Triceps" },
+      { id: "full_pullup", name: "Strict Pull-ups", icon: "🦅", baseSets: 3, baseReps: 8, focus: "Back & Grip" },
+      { id: "full_core", name: "Hanging Leg Raises & Core", icon: "🛡️", baseSets: 3, baseReps: 15, focus: "Core Rigidity" }
     ]
   }
 };
 
-// 3 DAILY AUXILIARY SHADOW HABITS
+// 3 DAILY DISCIPLINE PROTOCOLS
 const DAILY_HABITS = [
-  { id: "habit_water", name: "Shadow Hydration", icon: "💧", baseAmount: 2.5, unit: "Liters", desc: "Cellular recovery & muscle endurance" },
-  { id: "habit_steps", name: "Stamina March / Steps", icon: "👟", baseAmount: 8000, unit: "Steps", desc: "Active recovery & aerobic conditioning" },
-  { id: "habit_nutrition", name: "Monarch's Nutrition", icon: "🥗", baseAmount: 1, unit: "Clean Diet Target", desc: "High protein & nutrient-dense meals" }
+  { id: "habit_steps", type: "walk", name: "Stamina March / Steps", icon: "👟", baseAmount: 10000, unit: "Steps", desc: "Active recovery & aerobic conditioning" },
+  { id: "habit_water", type: "water", name: "Hydration Recovery", icon: "💧", baseAmount: 3.0, unit: "Liters", desc: "Cellular hydration & muscle performance" },
+  { id: "habit_nutrition", type: "nutrition", name: "Monarch's Nutrition", icon: "🥩", baseAmount: 1, unit: "Clean Diet Target", desc: "High protein & anabolic nutrient density" }
 ];
 
 // DEFAULT STARTING STATE
 const DEFAULT_STATE = {
   awakened: false,
-  hunterName: "HUNTER",
+  hunterName: "Sung Jin-Woo",
   fitnessRank: "beginner",
   goal: "Hypertrophy",
   level: 1,
   xp: 0,
+  currentStreak: 0,
+  lastCompletedDate: null,
+  personalRecords: {}, // { exerciseId: { name: "Bench Press", weight: 80, date: "Oct 11" } }
   currentSplit: "push",
   currentTab: "quests",
-  // Customizable Splits stored per user
+  currentTheme: "blue", // 'blue' (Monochrome Dark), 'purple' (Void Shadow), 'silver' (Titanium Slate)
+  currentAesthetic: "hunter",  // 'hunter' (Shadow Hunter), 'monarch' (Shadow Monarch)
   splits: JSON.parse(JSON.stringify(DEFAULT_SPLITS)),
   completedQuests: {},
   history: []
@@ -92,8 +111,28 @@ function loadData() {
       gameState = {
         ...DEFAULT_STATE,
         ...parsed,
+        currentStreak: Number(parsed.currentStreak || 0),
+        lastCompletedDate: parsed.lastCompletedDate || null,
+        personalRecords: parsed.personalRecords || {},
         splits: parsed.splits || JSON.parse(JSON.stringify(DEFAULT_SPLITS))
       };
+    } else {
+      // Migrate previous v4 or v3 saves if existing
+      const oldV4 = localStorage.getItem("solo_fitness_aura_v4") || localStorage.getItem("solo_fitness_monarch_v3");
+      if (oldV4) {
+        const parsedOld = JSON.parse(oldV4);
+        gameState = {
+          ...DEFAULT_STATE,
+          ...parsedOld,
+          hunterName: parsedOld.hunterName || "Sung Jin-Woo",
+          currentStreak: Number(parsedOld.currentStreak || 0),
+          lastCompletedDate: parsedOld.lastCompletedDate || null,
+          personalRecords: parsedOld.personalRecords || {},
+          currentTheme: "blue",
+          currentAesthetic: "hunter",
+          splits: parsedOld.splits || JSON.parse(JSON.stringify(DEFAULT_SPLITS))
+        };
+      }
     }
   } catch (error) {
     console.error("Save load error:", error);
@@ -110,7 +149,7 @@ function saveData() {
 }
 
 // ========================================================
-// 3. TAB NAVIGATION (Quests, Status, History)
+// 3. TAB NAVIGATION (Quests, Status, Archives)
 // ========================================================
 
 function switchTab(tabName) {
@@ -119,7 +158,6 @@ function switchTab(tabName) {
 
   gameState.currentTab = tabName;
 
-  // Toggle View Containers
   tabs.forEach((t) => {
     const viewEl = document.getElementById(`view-${t}`);
     const navBtn = document.getElementById(`nav-${t}`);
@@ -141,7 +179,6 @@ function switchTab(tabName) {
     }
   });
 
-  // Re-render the active tab
   render();
 }
 
@@ -178,7 +215,7 @@ function getScaledHabit(habit, level) {
 }
 
 // ========================================================
-// 5. RANK TITLE LOGIC
+// 5. HUNTER RANK PROGRESSION TITLES
 // ========================================================
 
 function getRankTitle(level) {
@@ -193,11 +230,14 @@ function getRankTitle(level) {
 }
 
 // ========================================================
-// 6. RENDERING LOGIC
+// 6. RENDERING & UI UPDATES
 // ========================================================
 
 function render() {
-  // 1. Status Cards
+  applyThemeAndAesthetic();
+  updateCompanionHeader();
+
+  // 1. Profile & Status
   const nameEl = document.getElementById("player-name-display");
   const rankEl = document.getElementById("player-rank");
   const goalEl = document.getElementById("player-goal-display");
@@ -234,7 +274,7 @@ function render() {
   // 4. Render Gym Exercises List
   const splitData = gameState.splits[gameState.currentSplit] || DEFAULT_SPLITS.push;
   const splitTitleEl = document.getElementById("current-split-title");
-  if (splitTitleEl) splitTitleEl.textContent = `${gameState.currentSplit.toUpperCase()} EXERCISES`;
+  if (splitTitleEl) splitTitleEl.textContent = `${gameState.currentSplit.toUpperCase()} PROTOCOLS`;
 
   const exercisesContainer = document.getElementById("exercises-list");
   if (exercisesContainer) {
@@ -243,30 +283,43 @@ function render() {
     if (splitData.exercises.length === 0) {
       exercisesContainer.innerHTML = `
         <div class="history-empty">
-          No exercises in this split yet. Tap "+ ADD EXERCISE" above to create one!
+          No protocols configured in this split. Tap "+ ADD PROTOCOL" above to create one.
         </div>
       `;
     } else {
       splitData.exercises.forEach((ex) => {
         const isDone = Boolean(gameState.completedQuests[ex.id]);
         const scaled = getScaledExercise(ex, gameState.level);
+        const currentPR = gameState.personalRecords && gameState.personalRecords[ex.id] ? gameState.personalRecords[ex.id].weight : null;
 
         const card = document.createElement("article");
-        card.className = `quest-card ${isDone ? "completed" : ""}`;
+        card.className = `quest-card quest-workout ${isDone ? "completed" : ""}`;
 
         card.innerHTML = `
           <div class="quest-icon" onclick="toggleQuest('${ex.id}')">${ex.icon || '⚔️'}</div>
-          <div class="quest-details" onclick="toggleQuest('${ex.id}')">
-            <div class="quest-title-row">
+          <div class="quest-details">
+            <div class="quest-title-row" onclick="toggleQuest('${ex.id}')">
               <h4 class="quest-title">${ex.name}</h4>
               <span class="target-badge">${scaled.targetText}</span>
+              ${currentPR ? `<span class="pr-badge-pill" title="Personal Record">PR: ${currentPR}kg</span>` : ''}
             </div>
-            <p class="quest-desc">${ex.focus || 'Target Workout'}</p>
+            <p class="quest-desc" onclick="toggleQuest('${ex.id}')">${ex.focus || 'Target Protocol'}</p>
+            
+            <!-- PR WEIGHT LOGGING INPUT -->
+            ${!isDone ? `
+              <div class="quest-weight-row">
+                <input type="number" class="quest-weight-input" placeholder="${currentPR ? currentPR : 'kg'}" 
+                  onchange="updateExerciseWeight('${ex.id}', '${ex.name.replace(/'/g, "\\'")}', this.value)" 
+                  title="Enter weight lifted to set or break your PR" step="0.5" min="1" max="500">
+                <span class="quest-weight-unit">KG (Record Weight)</span>
+              </div>
+            ` : ''}
+
             ${isDone ? '<span class="completed-locked-tag">✓ CLEARED & LOCKED</span>' : ''}
           </div>
           <div class="card-actions">
-            ${!isDone ? `<button class="card-tool-btn" onclick="openExerciseModal('${ex.id}')" title="Edit Exercise">✎</button>` : ''}
-            ${!isDone ? `<button class="card-tool-btn delete" onclick="deleteExercise('${ex.id}')" title="Delete Exercise">✕</button>` : ''}
+            ${!isDone ? `<button class="card-tool-btn" onclick="openExerciseModal('${ex.id}')" title="Edit Protocol">✎</button>` : ''}
+            ${!isDone ? `<button class="card-tool-btn delete" onclick="deleteExercise('${ex.id}')" title="Delete Protocol">✕</button>` : ''}
             <button class="quest-check-btn" type="button" onclick="toggleQuest('${ex.id}')" aria-label="Complete ${ex.name}">
               <span>✓</span>
             </button>
@@ -277,7 +330,7 @@ function render() {
     }
   }
 
-  // 5. Render Daily Habits List
+  // 5. Render Daily Discipline Habits
   const habitsContainer = document.getElementById("habits-list");
   if (habitsContainer) {
     habitsContainer.innerHTML = "";
@@ -285,8 +338,12 @@ function render() {
       const isDone = Boolean(gameState.completedQuests[hb.id]);
       const targetText = getScaledHabit(hb, gameState.level);
 
+      let typeClass = "quest-walk";
+      if (hb.type === "water") typeClass = "quest-water";
+      if (hb.type === "nutrition") typeClass = "quest-nutrition";
+
       const card = document.createElement("article");
-      card.className = `quest-card ${isDone ? "completed" : ""}`;
+      card.className = `quest-card ${typeClass} ${isDone ? "completed" : ""}`;
       card.onclick = () => toggleQuest(hb.id);
 
       card.innerHTML = `
@@ -307,7 +364,7 @@ function render() {
     });
   }
 
-  // 6. Calculate Completion %
+  // 6. Calculate Completion Percentage
   const currentExercises = splitData.exercises;
   const allCurrentTaskIds = [...currentExercises.map(e => e.id), ...DAILY_HABITS.map(h => h.id)];
   const totalTasks = allCurrentTaskIds.length;
@@ -324,15 +381,173 @@ function render() {
   const dailyFillEl = document.getElementById("daily-fill");
 
   if (percentEl) percentEl.textContent = `${dailyPercent}%`;
-  if (counterEl) counterEl.textContent = `${completedCount} of ${totalTasks} Completed`;
+  if (counterEl) counterEl.textContent = `${completedCount} of ${totalTasks} Cleared`;
   if (dailyFillEl) dailyFillEl.style.width = `${dailyPercent}%`;
 
-  // 7. Render History
+  // 7. Render Personal Records & Achievements Badges
+  renderPersonalRecords();
+  renderBadges();
+
+  // 8. Render Archives
   renderHistory();
 }
 
 /**
- * Renders the Dungeon Clear History List
+ * Updates male anime hero image, decree, date, and streak
+ */
+function updateCompanionHeader() {
+  const dateEl = document.getElementById("header-today-date");
+  const greetingEl = document.getElementById("companion-greeting");
+  const companionImg = document.getElementById("companion-img");
+  const streakCountEl = document.getElementById("header-streak-count");
+
+  if (dateEl) {
+    const today = new Date();
+    dateEl.textContent = today.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" }).toUpperCase();
+  }
+
+  if (streakCountEl) {
+    const streak = gameState.currentStreak || 0;
+    streakCountEl.textContent = `${streak}-DAY STREAK`;
+  }
+
+  if (greetingEl) {
+    greetingEl.textContent = `HUNTER ${gameState.hunterName.toUpperCase()}`;
+  }
+
+  if (companionImg) {
+    if (gameState.currentAesthetic === "monarch") {
+      companionImg.src = "hunter_monarch.svg";
+    } else {
+      companionImg.src = "hunter_protagonist.svg";
+    }
+  }
+}
+
+/**
+ * Tapping hero avatar outputs a determined combat decree
+ */
+function companionCheer() {
+  const quoteEl = document.getElementById("companion-quote");
+  const randomQuote = COMPANION_QUOTES[Math.floor(Math.random() * COMPANION_QUOTES.length)];
+  if (quoteEl) {
+    quoteEl.textContent = randomQuote;
+  }
+}
+
+/**
+ * Renders Personal Records (PR) showcase in Status tab
+ */
+function renderPersonalRecords() {
+  const prContainer = document.getElementById("pr-records-container");
+  const prTotalBadge = document.getElementById("pr-total-badge");
+  if (!prContainer) return;
+
+  const prs = gameState.personalRecords || {};
+  const prKeys = Object.keys(prs);
+
+  if (prTotalBadge) {
+    prTotalBadge.textContent = `${prKeys.length} Records`;
+  }
+
+  if (prKeys.length === 0) {
+    prContainer.innerHTML = `
+      <div class="history-empty" style="grid-column: 1 / -1; padding: 16px;">
+        No PR records logged yet. Enter your lifted weight (kg) on any protocol in today's quest list to establish your first record!
+      </div>
+    `;
+    return;
+  }
+
+  prContainer.innerHTML = "";
+  prKeys.forEach((key) => {
+    const pr = prs[key];
+    const tile = document.createElement("div");
+    tile.className = "pr-tile";
+    tile.innerHTML = `
+      <span class="pr-tile-title">${pr.name || 'Protocol'}</span>
+      <div class="pr-tile-value">
+        ${pr.weight} <span class="pr-tile-unit">KG</span>
+      </div>
+      <span class="pr-tile-date">Recorded: ${pr.date || 'Recent'}</span>
+    `;
+    prContainer.appendChild(tile);
+  });
+}
+
+/**
+ * Updates an exercise Personal Record (PR) weight and rewards bonus XP on new PB
+ */
+function updateExerciseWeight(exerciseId, exerciseName, rawValue) {
+  const val = parseFloat(rawValue);
+  if (isNaN(val) || val <= 0) return;
+
+  if (!gameState.personalRecords) {
+    gameState.personalRecords = {};
+  }
+
+  const existingPR = gameState.personalRecords[exerciseId];
+  const oldWeight = existingPR ? existingPR.weight : 0;
+
+  if (val > oldWeight) {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    gameState.personalRecords[exerciseId] = {
+      name: exerciseName,
+      weight: val,
+      date: dateStr
+    };
+
+    saveData();
+    // Grant +50 XP bonus for achieving a new PR
+    gainXP(50);
+    alert(`🏆 NEW PERSONAL RECORD! [${exerciseName.toUpperCase()}]: ${val} KG!\n+50 BONUS XP GRANTED! Keep pushing your limits, Hunter!`);
+    render();
+  } else if (!existingPR) {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    gameState.personalRecords[exerciseId] = {
+      name: exerciseName,
+      weight: val,
+      date: dateStr
+    };
+    saveData();
+    render();
+  }
+}
+
+/**
+ * Renders achievement badges
+ */
+function renderBadges() {
+  const container = document.getElementById("badges-container");
+  const countText = document.getElementById("badge-count-text");
+  if (!container) return;
+
+  container.innerHTML = "";
+  let unlockedCount = 0;
+
+  BADGES_DATABASE.forEach(b => {
+    const isUnlocked = gameState.level >= b.reqLevel;
+    if (isUnlocked) unlockedCount++;
+
+    const item = document.createElement("div");
+    item.className = `badge-item ${isUnlocked ? "unlocked" : "locked"}`;
+    item.title = `${b.title}: ${b.desc}`;
+    item.innerHTML = `
+      <span class="badge-icon">${b.icon}</span>
+      <span class="badge-title">${b.title.toUpperCase()}</span>
+    `;
+    container.appendChild(item);
+  });
+
+  if (countText) {
+    countText.textContent = `${unlockedCount} of ${BADGES_DATABASE.length} Unlocked`;
+  }
+}
+
+/**
+ * Renders Dungeon Archive records
  */
 function renderHistory() {
   const historyContainer = document.getElementById("history-container");
@@ -345,7 +560,7 @@ function renderHistory() {
   if (history.length === 0) {
     historyContainer.innerHTML = `
       <div class="history-empty">
-        No completed dungeons yet. Finish today's workout to claim your first clear record!
+        No dungeon logs recorded. Complete today's protocol to archive your first clear.
       </div>
     `;
     return;
@@ -370,122 +585,57 @@ function renderHistory() {
 }
 
 // ========================================================
-// 7. CUSTOM EXERCISE MANAGEMENT (Add, Edit, Delete)
+// 7. THEME & AESTHETIC CONTROLS
 // ========================================================
 
-function openExerciseModal(exerciseId = "") {
-  const modal = document.getElementById("exercise-modal");
-  const modalTitle = document.getElementById("exercise-modal-title");
-  const splitLabel = document.getElementById("exercise-modal-split-label");
-  const idInput = document.getElementById("edit-exercise-id");
-  const nameInput = document.getElementById("input-exercise-name");
-  const setsInput = document.getElementById("input-exercise-sets");
-  const repsInput = document.getElementById("input-exercise-reps");
-  const focusInput = document.getElementById("input-exercise-focus");
+function applyThemeAndAesthetic() {
+  document.body.className = `theme-${gameState.currentTheme || "blue"} aesthetic-${gameState.currentAesthetic || "hunter"}`;
 
-  const currentSplitKey = gameState.currentSplit;
-  const currentSplit = gameState.splits[currentSplitKey];
-
-  if (splitLabel) splitLabel.textContent = `Targeting: ${currentSplit.title.split("(")[0].trim()}`;
-
-  if (exerciseId) {
-    // EDIT MODE
-    const existing = currentSplit.exercises.find(e => e.id === exerciseId);
-    if (existing) {
-      if (modalTitle) modalTitle.textContent = "EDIT EXERCISE";
-      if (idInput) idInput.value = existing.id;
-      if (nameInput) nameInput.value = existing.name;
-      if (setsInput) setsInput.value = existing.baseSets;
-      if (repsInput) repsInput.value = existing.baseReps;
-      if (focusInput) focusInput.value = existing.focus || "";
+  const themeBtns = document.querySelectorAll(".theme-choice-btn");
+  themeBtns.forEach(btn => {
+    if (btn.getAttribute("data-theme") === gameState.currentTheme) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
     }
-  } else {
-    // ADD NEW MODE
-    if (modalTitle) modalTitle.textContent = "ADD NEW EXERCISE";
-    if (idInput) idInput.value = "";
-    if (nameInput) nameInput.value = "";
-    if (setsInput) setsInput.value = "3";
-    if (repsInput) repsInput.value = "10";
-    if (focusInput) focusInput.value = "";
-  }
+  });
 
-  if (modal) modal.classList.add("active");
-}
+  const hunterBtn = document.getElementById("btn-aesthetic-hunter");
+  const monarchBtn = document.getElementById("btn-aesthetic-monarch");
 
-function closeExerciseModal() {
-  const modal = document.getElementById("exercise-modal");
-  if (modal) modal.classList.remove("active");
-}
-
-function handleExerciseSubmit(event) {
-  event.preventDefault();
-
-  const idInput = document.getElementById("edit-exercise-id");
-  const nameInput = document.getElementById("input-exercise-name");
-  const setsInput = document.getElementById("input-exercise-sets");
-  const repsInput = document.getElementById("input-exercise-reps");
-  const focusInput = document.getElementById("input-exercise-focus");
-
-  const name = nameInput.value.trim();
-  const sets = parseInt(setsInput.value, 10) || 3;
-  const reps = parseInt(repsInput.value, 10) || 10;
-  const focus = focusInput.value.trim() || "Muscle Conditioning";
-  const existingId = idInput.value;
-
-  const currentSplitKey = gameState.currentSplit;
-  const currentSplit = gameState.splits[currentSplitKey];
-
-  if (existingId) {
-    // Update existing
-    const exIndex = currentSplit.exercises.findIndex(e => e.id === existingId);
-    if (exIndex !== -1) {
-      currentSplit.exercises[exIndex].name = name;
-      currentSplit.exercises[exIndex].baseSets = sets;
-      currentSplit.exercises[exIndex].baseReps = reps;
-      currentSplit.exercises[exIndex].focus = focus;
+  if (hunterBtn && monarchBtn) {
+    if (gameState.currentAesthetic === "monarch") {
+      monarchBtn.classList.add("active");
+      hunterBtn.classList.remove("active");
+    } else {
+      hunterBtn.classList.add("active");
+      monarchBtn.classList.remove("active");
     }
-  } else {
-    // Add new exercise
-    const newId = `custom_${Date.now()}`;
-    const newExercise = {
-      id: newId,
-      name: name,
-      icon: "⚔️",
-      baseSets: sets,
-      baseReps: reps,
-      focus: focus
-    };
-    currentSplit.exercises.push(newExercise);
   }
-
-  saveData();
-  closeExerciseModal();
-  render();
 }
 
-function deleteExercise(exerciseId) {
-  const currentSplitKey = gameState.currentSplit;
-  const currentSplit = gameState.splits[currentSplitKey];
-  const ex = currentSplit.exercises.find(e => e.id === exerciseId);
+function setAppTheme(themeName) {
+  const allowed = ["blue", "purple", "silver"];
+  if (allowed.includes(themeName)) {
+    gameState.currentTheme = themeName;
+    saveData();
+    render();
+  }
+}
 
-  if (!ex) return;
-
-  const confirmed = confirm(`Are you sure you want to remove "${ex.name}" from ${currentSplitKey.toUpperCase()} day?`);
-  if (!confirmed) return;
-
-  currentSplit.exercises = currentSplit.exercises.filter(e => e.id !== exerciseId);
-  delete gameState.completedQuests[exerciseId];
-
-  saveData();
-  render();
+function setAppAesthetic(aestheticName) {
+  if (aestheticName === "hunter" || aestheticName === "monarch") {
+    gameState.currentAesthetic = aestheticName;
+    saveData();
+    render();
+  }
 }
 
 // ========================================================
-// 8. QUEST INTERACTIONS & LOCKING (Option B)
+// 8. QUEST INTERACTIONS & LOCKING
 // ========================================================
 
 function toggleQuest(questId) {
-  // Option B Bug Fix: Once locked, it cannot be unclicked!
   if (gameState.completedQuests[questId]) {
     return;
   }
@@ -518,7 +668,114 @@ function selectSplit(splitKey) {
 }
 
 // ========================================================
-// 9. DUNGEON CLEAR / FINISH WORKOUT DAY
+// 9. CUSTOM PROTOCOL MANAGEMENT
+// ========================================================
+
+function openExerciseModal(exerciseId = "") {
+  const modal = document.getElementById("exercise-modal");
+  const modalTitle = document.getElementById("exercise-modal-title");
+  const splitLabel = document.getElementById("exercise-modal-split-label");
+  const idInput = document.getElementById("edit-exercise-id");
+  const nameInput = document.getElementById("input-exercise-name");
+  const setsInput = document.getElementById("input-exercise-sets");
+  const repsInput = document.getElementById("input-exercise-reps");
+  const focusInput = document.getElementById("input-exercise-focus");
+
+  const currentSplitKey = gameState.currentSplit;
+  const currentSplit = gameState.splits[currentSplitKey];
+
+  if (splitLabel) splitLabel.textContent = `Targeting: ${currentSplit.title.split("(")[0].trim()}`;
+
+  if (exerciseId) {
+    const existing = currentSplit.exercises.find(e => e.id === exerciseId);
+    if (existing) {
+      if (modalTitle) modalTitle.textContent = "Edit Protocol";
+      if (idInput) idInput.value = existing.id;
+      if (nameInput) nameInput.value = existing.name;
+      if (setsInput) setsInput.value = existing.baseSets;
+      if (repsInput) repsInput.value = existing.baseReps;
+      if (focusInput) focusInput.value = existing.focus || "";
+    }
+  } else {
+    if (modalTitle) modalTitle.textContent = "Add Protocol";
+    if (idInput) idInput.value = "";
+    if (nameInput) nameInput.value = "";
+    if (setsInput) setsInput.value = "3";
+    if (repsInput) repsInput.value = "10";
+    if (focusInput) focusInput.value = "";
+  }
+
+  if (modal) modal.classList.add("active");
+}
+
+function closeExerciseModal() {
+  const modal = document.getElementById("exercise-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function handleExerciseSubmit(event) {
+  event.preventDefault();
+
+  const idInput = document.getElementById("edit-exercise-id");
+  const nameInput = document.getElementById("input-exercise-name");
+  const setsInput = document.getElementById("input-exercise-sets");
+  const repsInput = document.getElementById("input-exercise-reps");
+  const focusInput = document.getElementById("input-exercise-focus");
+
+  const name = nameInput.value.trim();
+  const sets = parseInt(setsInput.value, 10) || 3;
+  const reps = parseInt(repsInput.value, 10) || 10;
+  const focus = focusInput.value.trim() || "Target Protocol";
+  const existingId = idInput.value;
+
+  const currentSplitKey = gameState.currentSplit;
+  const currentSplit = gameState.splits[currentSplitKey];
+
+  if (existingId) {
+    const exIndex = currentSplit.exercises.findIndex(e => e.id === existingId);
+    if (exIndex !== -1) {
+      currentSplit.exercises[exIndex].name = name;
+      currentSplit.exercises[exIndex].baseSets = sets;
+      currentSplit.exercises[exIndex].baseReps = reps;
+      currentSplit.exercises[exIndex].focus = focus;
+    }
+  } else {
+    const newId = `custom_${Date.now()}`;
+    const newExercise = {
+      id: newId,
+      name: name,
+      icon: "⚔️",
+      baseSets: sets,
+      baseReps: reps,
+      focus: focus
+    };
+    currentSplit.exercises.push(newExercise);
+  }
+
+  saveData();
+  closeExerciseModal();
+  render();
+}
+
+function deleteExercise(exerciseId) {
+  const currentSplitKey = gameState.currentSplit;
+  const currentSplit = gameState.splits[currentSplitKey];
+  const ex = currentSplit.exercises.find(e => e.id === exerciseId);
+
+  if (!ex) return;
+
+  const confirmed = confirm(`Delete "${ex.name}" from ${currentSplitKey.toUpperCase()} protocol?`);
+  if (!confirmed) return;
+
+  currentSplit.exercises = currentSplit.exercises.filter(e => e.id !== exerciseId);
+  delete gameState.completedQuests[exerciseId];
+
+  saveData();
+  render();
+}
+
+// ========================================================
+// 10. FINISH TRAINING DAY & RESET
 // ========================================================
 
 function finishWorkoutDay() {
@@ -531,22 +788,43 @@ function finishWorkoutDay() {
   });
 
   if (clearedCount === 0) {
-    alert("System Alert: You haven't cleared any quests yet today! Complete at least one exercise before finishing.");
+    alert("System Alert: You have not cleared any protocols yet today! Complete at least one exercise before logging.");
     return;
   }
 
   const confirmLog = confirm(
-    `Log today's workout (${splitData.title.split("(")[0].trim()}) to your Dungeon History?\n` +
-    `• Cleared: ${clearedCount} tasks\n` +
+    `Archive today's training (${splitData.title.split("(")[0].trim()})?\n` +
+    `• Protocols Cleared: ${clearedCount}\n` +
     `• Hunter Level: ${gameState.level}\n\n` +
-    `This will archive today's session and prepare fresh quests for tomorrow.`
+    `This will archive today's session and prepare fresh protocols for tomorrow.`
   );
 
   if (!confirmLog) return;
 
   const now = new Date();
   const dateStr = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const todayIsoDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
   
+  // Update consecutive day streak
+  if (!gameState.lastCompletedDate) {
+    gameState.currentStreak = 1;
+    gameState.lastCompletedDate = todayIsoDate;
+  } else if (gameState.lastCompletedDate !== todayIsoDate) {
+    const lastDate = new Date(gameState.lastCompletedDate);
+    const currentDate = new Date(todayIsoDate);
+    const diffTime = Math.abs(currentDate - lastDate);
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      // Completed on consecutive day
+      gameState.currentStreak = (gameState.currentStreak || 0) + 1;
+    } else {
+      // Missed one or more days, reset streak to 1
+      gameState.currentStreak = 1;
+    }
+    gameState.lastCompletedDate = todayIsoDate;
+  }
+
   const historyEntry = {
     date: dateStr,
     splitName: splitData.title.split("(")[0].trim(),
@@ -558,19 +836,17 @@ function finishWorkoutDay() {
   if (!gameState.history) gameState.history = [];
   gameState.history.push(historyEntry);
 
-  // Reset active quest status for next day
   gameState.completedQuests = {};
 
   saveData();
   render();
 
-  alert("DUNGEON CLEARED! Workout logged to your history. Great work, Hunter!");
-  // Automatically switch to history tab to see the new record!
+  alert("DUNGEON ARCHIVED! Outstanding discipline, Hunter!");
   switchTab("history");
 }
 
 function resetTodayQuests() {
-  if (confirm("Reset today's active quests? Your Hunter Level, XP, and History will remain safe.")) {
+  if (confirm("Reset active protocols? Your Level, XP, and Archives remain safe.")) {
     gameState.completedQuests = {};
     saveData();
     render();
@@ -578,7 +854,7 @@ function resetTodayQuests() {
 }
 
 function resetAllData() {
-  if (confirm("Reset ALL data and re-awaken from Level 1? This will wipe your custom exercises and history.")) {
+  if (confirm("Reset ALL data and re-awaken from Level 1? This will wipe custom protocols and archives.")) {
     localStorage.removeItem(STORAGE_KEY);
     gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
     openAwakeningModal(false);
@@ -587,7 +863,7 @@ function resetAllData() {
 }
 
 // ========================================================
-// 10. LEVEL UP & AWAKENING MODALS
+// 11. MODALS & CONTROLS
 // ========================================================
 
 function showLevelUpModal(oldLevel, newLevel) {
@@ -599,7 +875,7 @@ function showLevelUpModal(oldLevel, newLevel) {
   if (oldLevelEl) oldLevelEl.textContent = `LV. ${oldLevel}`;
   if (newLevelEl) newLevelEl.textContent = `LV. ${newLevel}`;
   if (noticeEl) {
-    noticeEl.textContent = `Workout difficulty scaled! Sets and reps increased for Level ${newLevel}.`;
+    noticeEl.textContent = `Protocol intensity escalated! Target sets and volume increased for Level ${newLevel}.`;
   }
   if (modal) modal.classList.add("active");
 }
@@ -607,6 +883,10 @@ function showLevelUpModal(oldLevel, newLevel) {
 function closeLevelModal() {
   const modal = document.getElementById("level-modal");
   if (modal) modal.classList.remove("active");
+}
+
+function openSettingsModal() {
+  switchTab("status");
 }
 
 function openAwakeningModal(isEdit = false) {
@@ -648,7 +928,7 @@ function handleAwakeningSubmit(event) {
 }
 
 // ========================================================
-// 11. INITIALIZATION & PWA SERVICE WORKER
+// 12. INITIALIZATION & PWA SERVICE WORKER
 // ========================================================
 window.addEventListener("DOMContentLoaded", () => {
   loadData();
@@ -658,11 +938,10 @@ window.addEventListener("DOMContentLoaded", () => {
     openAwakeningModal(false);
   }
 
-  // Register PWA Service Worker for 100% offline support
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("./sw.js")
-      .then(() => console.log("System: Offline Hunter Engine active."))
+      .then(() => console.log("System: Shadow Hunter Engine active."))
       .catch((err) => console.log("ServiceWorker registration skipped:", err));
   }
 });
