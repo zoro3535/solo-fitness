@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#1e1038"/>
+      <stop offset="60%" stop-color="#0a0515"/>
+      <stop offset="100%" stop-color="#040208"/>
+    </radialGradient>
+    
+    <!-- Neon Glow Filter -->
+    <filter id="purple-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Core Blade Gradient -->
+    <linearGradient id="blade-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#c084fc"/>
+      <stop offset="70%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App Icon Rounded Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg-grad)"/>
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="#a855f7" stroke-width="6" opacity="0.4"/>
+
+  <!-- Glowing Shadow Rune / Monogram Ring -->
+  <circle cx="256" cy="256" r="175" fill="none" stroke="#a855f7" stroke-width="4" stroke-dasharray="16 12" opacity="0.3" filter="url(#purple-glow)"/>
+
+  <!-- Dual Crossed Shadow Daggers (Solo Leveling Style) -->
+  <g filter="url(#purple-glow)">
+    <!-- Left Blade -->
+    <path d="M185 105 L265 240 L245 255 L165 125 Z" fill="url(#blade-grad)"/>
+    <polygon points="185,105 160,135 245,255" fill="#c084fc"/>
+    <rect x="238" y="246" width="30" height="8" rx="3" transform="rotate(45 253 250)" fill="#fbbf24"/>
+    <path d="M260 262 L295 297 L285 307 L250 272 Z" fill="#4c1d95"/>
+    <circle cx="295" cy="307" r="7" fill="#fbbf24"/>
+
+    <!-- Right Blade -->
+    <path d="M327 105 L247 240 L267 255 L347 125 Z" fill="url(#blade-grad)"/>
+    <polygon points="327,105 352,135 267,255" fill="#c084fc"/>
+    <rect x="244" y="246" width="30" height="8" rx="3" transform="rotate(-45 259 250)" fill="#fbbf24"/>
+    <path d="M252 262 L217 297 L227 307 L262 272 Z" fill="#4c1d95"/>
+    <circle cx="217" cy="307" r="7" fill="#fbbf24"/>
+  </g>
+
+  <!-- Central Monarch Diamond Core -->
+  <polygon points="256,180 286,230 256,280 226,230" fill="#ffffff" filter="url(#purple-glow)"/>
+  <polygon points="256,195 276,230 256,265 236,230" fill="#c084fc"/>
+
+  <!-- Leveling Text / Monogram -->
+  <text x="256" y="380" font-family="'Orbitron', -apple-system, sans-serif" font-size="34" font-weight="900" fill="#f3f4f6" text-anchor="middle" letter-spacing="8">
+    SOLO
+  </text>
+  <text x="256" y="415" font-family="'Orbitron', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#a855f7" text-anchor="middle" letter-spacing="6">
+    MONARCH
+  </text>
+</svg>
